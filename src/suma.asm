@@ -6,14 +6,13 @@ section .text
     global _start
 
 _start:
+    mov eax,10h
     ; write(stdout, msg, len)
     mov rax, 1      ; syscall write
     mov rdi, 1      ; descriptor stdout
     mov rsi, msg    ; direccion del mensaje
     mov rdx, len    ; longitud
     syscall
-
-    mov ax
 
     ; exit(0)
     mov rax, 60     ; syscall exit
