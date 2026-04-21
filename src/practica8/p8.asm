@@ -6,29 +6,29 @@ section	.text
 	
 _start:     
 
-    mov eax,arr
-    call impArreglo
+
+    mov eax,24  
+    mov edx,cad
+    mov bl,byte[lencad]
+    call itoa
+    call puts
+
 	mov	eax, 1	    	; seleccionar llamada al sistema para fin de programa
 	int	0x80        	; llamada al sistema - fin de programa
 
-    capArreglo:
-        push ecx
-        push esi
-        mov ecx,0
-        mov esi,0
-        mov cl,dl   
-       .cicloCapArr:
-        ;capturar en cadena de caracteres
-        ; ebx <-convertir a entero (atoi)
-        mov dword[eax+esi] ,ebx
+    mov edx,ncad
+    call puts
+    mov eax,arr
+    mov edx,0
+    mov dl,byte[len]
+    call impArreglo
+    mov al,10
+    call putchar
 
-        inc esi
-        loop .cicloCapArr
-        pop esi
-        pop ecx
-        ret 
+	mov	eax, 1	    	; seleccionar llamada al sistema para fin de programa
+	int	0x80        	; llamada al sistema - fin de programa
 
-        
+
     impArreglo:
         push ecx
         push esi
@@ -39,19 +39,22 @@ _start:
         push eax
         push edx
         ;PARAMETRO DE ITOA
-        mov eax,dword[eax+esi]    
+        mov edx,eax
+        mov eax,dword[edx+esi*4]    
         mov edx,cad
         mov bl,byte[lencad]
         call itoa
 
         mov edx,cad
         call puts
-
+        mov al,' '
+        call putchar
 
         inc esi
         pop edx
         pop eax
         loop .cicloImpArr
+
         pop esi
         pop ecx
         ret 
@@ -59,13 +62,15 @@ _start:
     itoa:
         ;eax NUMERO ENTERO
         ;edx CADENA
-        ;bl Longitud de la cadena
+        ;bl Longitud de la cadena        
+        push dword[divBase]
+        pop dword[divi]
+
         push esi
         mov esi,0
         mov dword[cociente],0
         mov dword[residuo],0
-        push dword[divBase]
-        pop dword[divi]
+        mov dword[numero],eax        
         cmp eax,0
         jge .while 
         mov byte[edx+esi],'-'
@@ -77,7 +82,7 @@ _start:
         mov edx,0
         idiv dword[divi]
         cmp eax,0
-        jne .do
+        jne .salir
         mov edx,0
         mov eax,dword[divi]
         idiv dword[base]
@@ -85,8 +90,11 @@ _start:
         pop edx
         pop eax
         jmp .while
+        
+        .salir:
+        pop edx
+        pop eax
 
-        mov dword[numero],eax
         .do:
         push edx
         mov edx,0
@@ -123,7 +131,7 @@ section	.data
     lencad db 64
     cad	times 64 db 0
     len db 5
-    arr	dd 1,4,3,2,5
+    arr	dd 24,4,3,2,52
 
     
     numero dd 0
