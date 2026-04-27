@@ -1,6 +1,19 @@
 %include "../../lib/pc_io.inc"  	; incluir declaraciones de procedimiento externos
 								; que se encuentran en la biblioteca libpc_io.a
 
+
+%macro FOR 4
+    push ecx
+    push edx
+    mov ecx,%1
+    mov edx,%2
+    .%4:
+        call %3
+    loop .%4
+    pop edx
+    pop ecx
+%endmacro
+
 section	.text
 	global _start       ;referencia para inicio de programa
 	global _imprimir     
@@ -17,7 +30,9 @@ _start:
     push msg1       ;PRIMER PARAMETRO
     call _imprimir
     add esp, 8 ;LIMPIA PARAMETROS DE LA FUNCION DE LA PILA
-
+   
+    FOR 3,msg1,puts,l1
+    FOR 2,msg2,puts,l2
     
 	mov	eax, 1	    	; seleccionar llamada al sistema para fin de programa
 	int	0x80        	; llamada al sistema - fin de programa
@@ -40,10 +55,13 @@ _start:
         mov esp, ebp        ; Restaurar el puntero de la pila (libera el espacio reservado para [ebp-4])
         pop ebp
         ret
+
     
 
 section	.data
     msg1 db  'Hola mundo',0xa,0 
     msg2 db  'OC',0xa,0 
     msg3 db  'Practica 9',0xa,0 
+    x db 1
+    y db 2
 
