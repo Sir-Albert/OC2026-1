@@ -30,8 +30,8 @@ _start:
     call _imprimir  ;_imprimir(msg1,msg2)
     add esp, 8      ;LIMPIA PARAMETROS DE LA FUNCION DE LA PILA
    
-    FOR 3,msg1,puts,l1
-    FOR 2,msg2,puts,l2
+    FOR 3,msg1,puts,l1    ;LLAMADA/EXPANSION DE MACRO
+    FOR 2,msg2,puts,l2    ;LLAMADA/EXPANSION DE MACRO
     
 	mov	eax, 1	    	; seleccionar llamada al sistema para fin de programa
 	int	0x80        	; llamada al sistema - fin de programa
