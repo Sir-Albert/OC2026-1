@@ -19,17 +19,16 @@ section	.text
 	global _imprimir     
 	
 _start:                
-
     push msg1       ;SEGUNDO PARAMETRO
     push msg2       ;PRIMER PARAMETRO
-    call _imprimir
-    add esp, 8 ;LIMPIA PARAMETROS DE LA FUNCION DE LA PILA
+    call _imprimir  ;_imprimir(msg2,msg1)
+    add esp, 8      ;LIMPIA PARAMETROS DE LA FUNCION DE LA PILA
 
     
     push msg2       ;SEGUNDO PARAMETRO
     push msg1       ;PRIMER PARAMETRO
-    call _imprimir
-    add esp, 8 ;LIMPIA PARAMETROS DE LA FUNCION DE LA PILA
+    call _imprimir  ;_imprimir(msg1,msg2)
+    add esp, 8      ;LIMPIA PARAMETROS DE LA FUNCION DE LA PILA
    
     FOR 3,msg1,puts,l1
     FOR 2,msg2,puts,l2
@@ -44,7 +43,7 @@ _start:
         
         mov dword[ebp-4],msg3 ;VARIABLE LOCAL
 
-        mov edx,[ebp-4]    ;VARIABLE LOCAL
+        mov edx,[ebp-4]    ;CARGAR VARIABLE LOCAL
 	    call puts
         
         mov edx,[ebp+8]    ;PRIMER PARAMETRO
@@ -52,7 +51,7 @@ _start:
         mov edx,[ebp+12]   ;SEGUNDO PARAMETRO
 	    call puts     
 
-        mov esp, ebp        ; Restaurar el puntero de la pila (libera el espacio reservado para [ebp-4])
+        mov esp, ebp       ;Restaurar el puntero de la pila (libera el espacio reservado para las variables locales)
         pop ebp
         ret
 
