@@ -16,7 +16,8 @@
 
 section	.text
 	global _start       ;referencia para inicio de programa
-	global _imprimir     
+    global _imprimir     
+	
 	
 _start:                
     push msg1       ;SEGUNDO PARAMETRO
