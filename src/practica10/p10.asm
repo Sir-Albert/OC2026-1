@@ -1,10 +1,38 @@
 %include "../../lib/pc_io.inc"  	; incluir declaraciones de procedimiento externos
-								; que se encuentran en la biblioteca libpc_io.a
+	
+    	
+        						; que se encuentran en la biblioteca libpc_io.a
+%macro FOR 3
+    push ecx
+    push ebx
+    mov ecx,-1
+    mov ebx,%1
+    .%3:
+        inc ecx
+        cmp ebx,ecx
+        je %%salir
+        jmp %2
+    %%salir:
+    pop ebx
+    pop ecx
+%endmacro
+
+
+%macro PROTO_ENTRADA 0
+    push ebp
+    mov ebp,esp
+%endmacro
+
+%macro PROTO_SALIDA 0
+    mov esp,ebp
+    pop ebp
+%endmacro
 
 
 section	.text
     global _imprimir     
-    global _primo    
+    global _primo   
+    global _minimo
 
 _imprimir:
     push ebp
@@ -25,6 +53,9 @@ _primo:
 
     push edx
     push ebx
+
+    cmp dword[ebp+8],2
+    je .siprimo
 
     mov ebx,2
     mov edx,0
@@ -61,4 +92,25 @@ _primo:
     pop ebp
     ret  
 
+_minimo:
+    PROTO_ENTRADA
 
+    mov edx,[ebp+8] ;dir inicio arreglo
+    mov eax,[edx]   ;arr[0]
+
+    FOR dword[ebp+12],.cuerpo,calcularMinimo
+    
+    jmp .finminimo
+
+    .cuerpo:
+    cmp dword[edx+ecx*4],eax
+    jl .intercambiar
+    jmp .calcularMinimo
+
+    .intercambiar:
+        mov eax,dword[edx+ecx*4]
+    jmp .calcularMinimo
+
+    .finminimo:
+    PROTO_SALIDA
+    ret
